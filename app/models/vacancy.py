@@ -127,6 +127,11 @@ class Vacancy(BaseModel):
         nullable=False,
     )
 
+    signing_bonus: Mapped[int] = mapped_column(
+        default=0,
+        nullable=False,
+    )
+
     start_date: Mapped[date | None] = mapped_column(
         Date
     )
