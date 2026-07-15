@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -16,12 +16,12 @@ class BaseModel(db.Model):
     )
 
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow,
+        default=lambda: datetime.now(UTC),
         nullable=False,
     )
 
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
         nullable=False,
     )
