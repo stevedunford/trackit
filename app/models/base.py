@@ -1,28 +1,27 @@
 from datetime import datetime
 
+from sqlalchemy.orm import Mapped, mapped_column
+
 from app.extensions import db
 
 
 class BaseModel(db.Model):
     __abstract__ = True
 
-    id = db.Column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    active = db.Column(
-        db.Boolean,
+    active: Mapped[bool] = mapped_column(
+        default=True,
         nullable=False,
-        default=True
     )
 
-    created_at = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.utcnow
-    )
-
-    updated_at = db.Column(
-        db.DateTime,
-        nullable=False,
+    created_at: Mapped[datetime] = mapped_column(
         default=datetime.utcnow,
-        onupdate=datetime.utcnow
+        nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+        nullable=False,
     )

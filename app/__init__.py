@@ -1,15 +1,20 @@
 from flask import Flask
 
-from config import config
+from .config import Config
+from .extensions import db, migrate
 
 
-def create_app(config_name: str = "default"):
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(config[config_name])
-    app.config.from_pyfile("config.py", silent=True)
+def create_app():
+    app = Flask(__name__)
 
-    from app.routes import main_bp
+    app.config.from_object(Config)
 
-    app.register_blueprint(main_bp)
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    # Register models
+    from app import models
+
+    # Register blueprints later
 
     return app
