@@ -1,4 +1,4 @@
-school_code,name,address,locality,postcode,school_type,latitude,longitude,website,phone,enrolment,incentive_points
+school_code,name,address,locality,postcode,school_type,latitude,longitude,website,phone,enrolment,transfer_points
 8142,Parkes High School,2A Albert Street,Parkes,2870,HS,-33.1387,148.1809,https://parkes-h.schools.nsw.gov.au,0268621844,650,0
 8194,Forbes High School,18 Wyndham Avenue,Forbes,2871,HS,-33.3640,148.0115,https://forbes-h.schools.nsw.gov.au,0268521933,520,0
 8110,Dubbo College Senior Campus,Tony McGrane Place,Dubbo,2830,COL,-32.2347,148.6282,https://dubbo-h.schools.nsw.gov.au,0268814655,850,0

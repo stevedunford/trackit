@@ -30,6 +30,7 @@ from app.models.base import BaseModel
 # ---------------------------------------------------------------------
 # Type Check Code
 # ---------------------------------------------------------------------
+
 if TYPE_CHECKING:
     from .geography import Locality
     from .reference import SchoolType
@@ -46,6 +47,10 @@ class AliasSource(Enum):
     MANUAL = "Manual"
     HISTORICAL = "Historical"
 
+
+# ---------------------------------------------------------------------
+# School
+# ---------------------------------------------------------------------
 
 class School(BaseModel):
     """
@@ -73,8 +78,8 @@ class School(BaseModel):
         index=True,
     )
 
-    school_code: Mapped[str] = mapped_column(
-        String(20),
+    school_code: Mapped[int] = mapped_column(
+        Integer,
         nullable=False,
         index=True,
     )
@@ -121,9 +126,21 @@ class School(BaseModel):
 
     enrolment: Mapped[int | None]
 
-    years_from: Mapped[int | None]
+    transfer_points: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
+        nullable=False,
+    )
 
-    years_to: Mapped[int | None]
+    connected_communities: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False,
+    )
+
+    year_from: Mapped[int | None]
+
+    year_to: Mapped[int | None]
 
     principal: Mapped[str | None] = mapped_column(
         String(100)
@@ -151,12 +168,6 @@ class School(BaseModel):
         lazy="selectin",
     )
 
-    incentives: Mapped[list["SchoolIncentive"]] = relationship(
-        back_populates="school",
-        lazy="selectin",
-        cascade="all, delete-orphan",
-    )
-
     vacancies: Mapped[list["Vacancy"]] = relationship(
         back_populates="school",
         lazy="selectin",
@@ -172,17 +183,16 @@ class School(BaseModel):
         return f"<School {self.school_code} - {self.name}>"
 
 
+# ---------------------------------------------------------------------
+# School Alias
+# ---------------------------------------------------------------------
+
 class SchoolAlias(BaseModel):
     """
-    Alternative name for a school.
+    Alternative names for a school.
 
     Used to match historical JobFeeds and other data sources where
-    a school's published name differs from its canonical name.
-
-    Examples:
-        Dubbo College Senior Campus
-        Dubbo College (Senior Campus)
-        Dubbo College - Senior Campus
+    the published school name differs from the canonical name.
     """
 
     __tablename__ = "school_aliases"
@@ -210,52 +220,3 @@ class SchoolAlias(BaseModel):
 
     def __repr__(self) -> str:
         return f"<SchoolAlias {self.name}>"
-
-
-class SchoolIncentive(BaseModel):
-    """
-    Historical incentive record for a school.
-
-    A school may have multiple incentive records over time.
-    """
-
-    __tablename__ = "school_incentives"
-
-    school_id: Mapped[int] = mapped_column(
-        ForeignKey("schools.id"),
-        nullable=False,
-        index=True,
-    )
-
-    points: Mapped[int] = mapped_column(
-        Integer,
-        nullable=False,
-    )
-
-    recruitment_bonus: Mapped[int] = mapped_column(
-        Integer,
-        default=0,
-        nullable=False,
-    )
-
-    retention_bonus: Mapped[int] = mapped_column(
-        Integer,
-        default=0,
-        nullable=False,
-    )
-
-    effective_from: Mapped[int | None]
-
-    effective_to: Mapped[int | None]
-
-    school: Mapped["School"] = relationship(
-        back_populates="incentives",
-        lazy="selectin",
-    )
-
-    def __repr__(self) -> str:
-        return (
-            f"<SchoolIncentive "
-            f"{self.points} points "
-            f"({self.school.name})>"
-        )
