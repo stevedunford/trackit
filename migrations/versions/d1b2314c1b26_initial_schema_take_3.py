@@ -1,8 +1,8 @@
-"""Initial schema, take 2
+"""Initial schema, take 3
 
-Revision ID: 0ed08ec627a1
+Revision ID: d1b2314c1b26
 Revises: 
-Create Date: 2026-07-15 22:02:05.642851
+Create Date: 2026-07-15 22:36:16.157648
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0ed08ec627a1'
+revision = 'd1b2314c1b26'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -108,7 +108,7 @@ def upgrade():
     op.create_table('schools',
     sa.Column('locality_id', sa.Integer(), nullable=False),
     sa.Column('school_type_id', sa.Integer(), nullable=False),
-    sa.Column('school_code', sa.String(length=20), nullable=False),
+    sa.Column('school_code', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('short_name', sa.String(length=80), nullable=True),
     sa.Column('address', sa.String(length=200), nullable=True),
@@ -119,8 +119,10 @@ def upgrade():
     sa.Column('latitude', sa.Float(), nullable=False),
     sa.Column('longitude', sa.Float(), nullable=False),
     sa.Column('enrolment', sa.Integer(), nullable=True),
-    sa.Column('years_from', sa.Integer(), nullable=True),
-    sa.Column('years_to', sa.Integer(), nullable=True),
+    sa.Column('transfer_points', sa.Integer(), nullable=False),
+    sa.Column('connected_communities', sa.Boolean(), nullable=False),
+    sa.Column('year_from', sa.Integer(), nullable=True),
+    sa.Column('year_to', sa.Integer(), nullable=True),
     sa.Column('principal', sa.String(length=100), nullable=True),
     sa.Column('selective', sa.Boolean(), nullable=False),
     sa.Column('boarding', sa.Boolean(), nullable=False),
@@ -153,23 +155,6 @@ def upgrade():
     with op.batch_alter_table('school_aliases', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_school_aliases_name'), ['name'], unique=False)
         batch_op.create_index(batch_op.f('ix_school_aliases_school_id'), ['school_id'], unique=False)
-
-    op.create_table('school_incentives',
-    sa.Column('school_id', sa.Integer(), nullable=False),
-    sa.Column('points', sa.Integer(), nullable=False),
-    sa.Column('recruitment_bonus', sa.Integer(), nullable=False),
-    sa.Column('retention_bonus', sa.Integer(), nullable=False),
-    sa.Column('effective_from', sa.Integer(), nullable=True),
-    sa.Column('effective_to', sa.Integer(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('active', sa.Boolean(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    with op.batch_alter_table('school_incentives', schema=None) as batch_op:
-        batch_op.create_index(batch_op.f('ix_school_incentives_school_id'), ['school_id'], unique=False)
 
     op.create_table('vacancies',
     sa.Column('school_id', sa.Integer(), nullable=False),
@@ -228,10 +213,6 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_vacancies_jobfeed_id'))
 
     op.drop_table('vacancies')
-    with op.batch_alter_table('school_incentives', schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f('ix_school_incentives_school_id'))
-
-    op.drop_table('school_incentives')
     with op.batch_alter_table('school_aliases', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_school_aliases_school_id'))
         batch_op.drop_index(batch_op.f('ix_school_aliases_name'))
