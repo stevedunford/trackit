@@ -127,7 +127,12 @@ class Vacancy(BaseModel):
         nullable=False,
     )
 
-    signing_bonus: Mapped[int] = mapped_column(
+    has_signing_bonus: Mapped[bool] = mapped_column(
+        default=False,
+        nullable=False,
+    )
+
+    signing_bonus_amount: Mapped[int] = mapped_column(
         default=0,
         nullable=False,
     )
