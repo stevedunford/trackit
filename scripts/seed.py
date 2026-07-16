@@ -26,6 +26,7 @@ from app.extensions import db
 from sqlalchemy import select
 
 from app.models.geography import Region
+from app.models.reference import SchoolType
 
 
 # ---------------------------------------------------------------------
@@ -214,7 +215,70 @@ def load_localities() -> None:
 
 def load_school_types() -> None:
     print("Loading School Types...")
-    print_summary("School Types", 0, 0, 0, 0)
+    
+    filename = SEED_DIR / "school_types.csv"
+
+    rows = read_csv(filename)
+
+    added = 0
+    updated = 0
+    unchanged = 0
+    errors = 0
+
+    for line_number, row in enumerate(rows, start=2):
+
+        try:
+
+            name = row.get("name", "").strip()
+
+            if not name:
+                raise ValueError("Missing school type name")
+
+            school_type = db.session.execute(
+                select(SchoolType).filter_by(name=name)
+            ).scalar_one_or_none()
+
+            if school_type is None:
+
+                school_type = SchoolType(
+                    name=name,
+                )
+
+                db.session.add(school_type)
+                added += 1
+
+            else:
+
+                changed = False
+
+                #
+                # Future school type fields go here.
+                #
+
+                if changed:
+                    updated += 1
+                else:
+                    unchanged += 1
+
+        except Exception as ex:
+
+            print(f"  ERROR: {filename.name} line {line_number}: {ex}")
+            errors += 1
+
+    try:
+        db.session.commit()
+    except Exception as ex:
+        db.session.rollback()
+        print(f"\nDatabase commit failed: {ex}")
+        return
+
+    print_summary(
+        "School Types",
+        added,
+        updated,
+        unchanged,
+        errors,
+    )
 
 
 def load_faculties() -> None:
