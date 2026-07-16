@@ -1,10 +1,11 @@
-code,name
-TAS,Technological and Applied Studies
-CAPA,Creative and Performing Arts
-MAT,Mathematics
-SCI,Science
-ENG,English
-HSIE,Human Society and Its Environment
-PDHPE,Personal Development, Health and Physical Education
-LANG,Languages
-SUP,Support
+code,name,sort_order
+ENG,English,10
+MAT,Mathematics,20
+SCI,Science,30
+HSIE,Human Society and Its Environment,40
+LANG,Languages,50
+CAPA,Creative and Performing Arts,60
+PDHPE,"Personal Development, Health and Physical Education",70
+TAS,Technological and Applied Studies,80
+VET,Vocational Education and Training,90
+SUP,Support,100

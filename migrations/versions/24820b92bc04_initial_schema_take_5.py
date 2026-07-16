@@ -1,8 +1,8 @@
-"""Initial schema, take 3
+"""Initial schema, take 5
 
-Revision ID: d1b2314c1b26
+Revision ID: 24820b92bc04
 Revises: 
-Create Date: 2026-07-15 22:36:16.157648
+Create Date: 2026-07-16 15:16:08.335105
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd1b2314c1b26'
+revision = '24820b92bc04'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -58,6 +58,7 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_regions_name'), ['name'], unique=True)
 
     op.create_table('school_types',
+    sa.Column('code', sa.String(length=10), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.String(length=255), nullable=True),
     sa.Column('sort_order', sa.Integer(), nullable=False),
@@ -68,6 +69,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('school_types', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_school_types_code'), ['code'], unique=True)
         batch_op.create_index(batch_op.f('ix_school_types_name'), ['name'], unique=True)
 
     op.create_table('localities',
@@ -95,8 +97,8 @@ def upgrade():
     sa.Column('code', sa.String(length=20), nullable=False),
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('sort_order', sa.Integer(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['faculty_id'], ['faculties.id'], ),
@@ -236,6 +238,7 @@ def downgrade():
     op.drop_table('localities')
     with op.batch_alter_table('school_types', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_school_types_name'))
+        batch_op.drop_index(batch_op.f('ix_school_types_code'))
 
     op.drop_table('school_types')
     with op.batch_alter_table('regions', schema=None) as batch_op:

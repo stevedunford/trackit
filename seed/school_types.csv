@@ -1,6 +1,5 @@
-code,name
-HS,High School
-CS,Central School
-CC,Community School
-SC,School for Specific Purposes
-COL,District/College Campus
+code,name,description
+HS,High School,Secondary school for Years 7-12
+CES,Central or Community School,Kindergarten to Year 12 school serving a regional or local community
+SSP,School for Specific Purposes,Specialist school supporting students with additional educational needs
+COL,Multi-campus College,Part of a multi-campus college operating as a single educational entity

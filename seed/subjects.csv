@@ -1,5 +1,153 @@
-code,name,faculty
-IPT,Information Processes and Technology,TAS
-IST,Information and Software Technology,TAS
-ITX,Technology Mandatory,TAS
-SDD,Software Design and Development,TAS
+code,name,faculty,active,sort_order
+AGR,Agriculture/Agriculture Technology,TAS,1,10
+DAT,Design and Technology,TAS,1,20
+ITX,Technology Mandatory (Years 7-8),TAS,1,30
+ENS,Engineering Studies / Industrial Technology – Engineering,TAS,1,40
+FTY,Food Technology,TAS,1,50
+ITG,Industrial Technology – Graphics / Graphics Technology,TAS,1,60
+ITO,Industrial Technology – Automotive,TAS,1,70
+ITB,Industrial Technology – Building & Construction,TAS,1,80
+ITE,Industrial Technology – Electronics,TAS,1,90
+ITF,Industrial Technology – Farm Maintenance,TAS,1,100
+ITM,Industrial Technology – Metal,TAS,1,110
+ITD,Industrial Technology – Multimedia / Photography,TAS,1,120
+ITP,Industrial Technology – Polymers,TAS,1,130
+ITW,Industrial Technology – Timber,TAS,1,140
+IPT,Information Processes & Technology,TAS,1,150
+IST,Information & Software Technology,TAS,1,160
+MAR,Marine Studies / Marine and Aquaculture Technology,TAS,1,170
+SDD,Software Design & Development,TAS,1,180
+TXD,Textiles and Design / Textiles Technology,TAS,1,190
+VAV,Active Volunteering,VET,1,300
+VAD,Assistant Dance Teaching,VET,1,310
+VSA,Athlete,VET,1,320
+VBS,Business Services,VET,1,330
+VCG,Construction,VET,1,340
+VCB,Construction - Brick and Block,VET,1,350
+VCI,Creative Industries,VET,1,360
+VDF,Design Fundamentals,VET,1,370
+VNG,Entertainment Industry - General,VET,1,380
+VFA,Financial Services - Accounts Administration,VET,1,390
+VFS,Financial Services - Financial Services,VET,1,400
+VSF,Fitness,VET,1,410
+VFM,Furniture Making Pathways,VET,1,420
+VHO,Hospitality - Commercial Cookery,VET,1,430
+VHF,Hospitality - Food and Beverage,VET,1,440
+VIF,Information Technology - Foundation,VET,1,450
+VIG,Information Technology - Digital Animation and Graphics,VET,1,460
+VIN,Information Technology - Network and Hardware,VET,1,470
+VIC,Information Technology - Systems and Cyber Security,VET,1,480
+VEG,Manufacturing and Engineering,VET,1,490
+VMI,Music Industry,VET,1,500
+VSO,Outdoor Recreation,VET,1,510
+VPI,Primary Industries - Artificial Insemination,VET,1,520
+VPT,Primary Industries - Certificate III in Agriculture,VET,1,530
+VPR,Primary Industries - Drones,VET,1,540
+VPG,Primary Industries - General Agriculture,VET,1,550
+VPH,Primary Industries - Horticulture,VET,1,560
+VRI,Resources and Infrastructure,VET,1,570
+VRO,Retail Services - Operations,VET,1,580
+VSM,Screen and Media,VET,1,590
+VSP,Skills for Work and Vocational Pathways,VET,1,600
+VSR,Sport and Recreation,VET,1,610
+VSC,Sport Coaching,VET,1,620
+VTI,Tourism - Australian Indigenous Culture,VET,1,630
+VVA,Visual Art,VET,1,640
+VWO,Warehousing Operations,VET,1,650
+VWS,Workplace Skills,VET,1,660
+CAR,Careers,SUP,1,800
+CCO,Computer Coordinator,SUP,1,810
+EAL,English as an Additional Language or Dialect,SUP,1,820
+GEN,General,SUP,1,830
+LIB,Library,SUP,1,840
+SCH,School Counsellor,SUP,1,850
+AUT,Autism,SUP,1,860
+BD,Behaviour Difficulties,SUP,1,870
+BDI,Behaviour Difficulties (Itinerant),SUP,1,880
+SCP,Substitute Care Program,SUP,1,890
+JJC,Juvenile Justice Centres,SUP,1,900
+ED,Emotional Disturbance,SUP,1,910
+HI,Hearing Impairment,SUP,1,920
+HII,Hearing Impairment (Itinerant),SUP,1,930
+INT,Integration,SUP,1,940
+LA,Learning Assistance,SUP,1,950
+MID,Mild Intellectual Disability,SUP,1,960
+MOD,Moderate Intellectual Disability,SUP,1,970
+PD,Physical Disability,SUP,1,980
+SID,Severe Intellectual Disability,SUP,1,990
+TRI,Transition (Itinerant),SUP,1,1000
+VI,Vision Impairment,SUP,1,1010
+VII,Vision Impairment (Itinerant),SUP,1,1020
+ART,Visual Arts,CAPA,1,1200
+DRA,Drama,CAPA,1,1210
+MUS,Music,CAPA,1,1220
+MUE,Music Extension 1 & 2,CAPA,1,1230
+VDN,Visual Design,CAPA,1,1240
+CAJ,Child Studies,PDHPE,1,1300
+DAN,Dance,PDHPE,1,1310
+ECS,Exploring Early Childhood,PDHPE,1,1320
+PAS,"Personal Development, Health and Physical Education",PDHPE,1,1330
+SLR,"Sport, Lifestyle and Recreation",PDHPE,1,1340
+ENG,English (Years 7-10),ENG,1,1400
+ESG,English (Years 11-12),ENG,1,1410
+ENE,English Extension 1 & 2,ENG,1,1420
+MTH,Mathematics (Years 7-10),MAT,1,1500
+MSH,Mathematics (Years 11-12),MAT,1,1510
+MAE,Mathematics Extension 1 & 2,MAT,1,1520
+SCI,Science (Years 7-10),SCI,1,1600
+BIO,Biology,SCI,1,1610
+CHE,Chemistry,SCI,1,1620
+EVS,Earth and Environmental Science,SCI,1,1630
+INS,Investigating Science,SCI,1,1640
+PHY,Physics,SCI,1,1650
+ABS,Aboriginal Studies,HSIE,1,1700
+BST,Business Studies,HSIE,1,1710
+COM,Commerce,HSIE,1,1720
+ECO,Economics,HSIE,1,1730
+GEO,Geography,HSIE,1,1740
+HEX,History Extension,HSIE,1,1750
+HIA,Ancient History,HSIE,1,1760
+HIM,Modern History,HSIE,1,1770
+HIS,History (Years 7-10),HSIE,1,1780
+LST,Legal Studies,HSIE,1,1790
+SOC,Society and Culture,HSIE,1,1800
+ABL,Aboriginal Languages,LANG,1,1900
+ARA,Arabic,LANG,1,1910
+AUS,Auslan,LANG,1,1920
+ARM,Armenian,LANG,1,1930
+CHI,Chinese (Mandarin),LANG,1,1940
+CRO,Croatian,LANG,1,1950
+CZE,Czech,LANG,1,1960
+DUT,Dutch,LANG,1,1970
+FIL,Filipino,LANG,1,1980
+FRE,French,LANG,1,1990
+GER,German,LANG,1,2000
+GRC,Greek (Classical),LANG,1,2010
+GRM,Greek (Modern),LANG,1,2020
+HBC,Hebrew (Classical),LANG,1,2030
+HBM,Hebrew (Modern),LANG,1,2040
+HIN,Hindi,LANG,1,2050
+HUN,Hungarian,LANG,1,2060
+IND,Indonesian,LANG,1,2070
+ITA,Italian,LANG,1,2080
+JAP,Japanese,LANG,1,2090
+KHM,Khmer,LANG,1,2100
+KOR,Korean,LANG,1,2110
+LAT,Latin,LANG,1,2120
+LAV,Latvian,LANG,1,2130
+MAC,Macedonian,LANG,1,2140
+MAL,Malay,LANG,1,2150
+MAT,Maltese,LANG,1,2160
+PER,Persian,LANG,1,2170
+POL,Polish,LANG,1,2180
+POR,Portuguese,LANG,1,2190
+PUN,Punjabi,LANG,1,2200
+RUS,Russian,LANG,1,2210
+SER,Serbian,LANG,1,2220
+SLO,Slovenian,LANG,1,2230
+SPA,Spanish,LANG,1,2240
+SWE,Swedish,LANG,1,2250
+TAM,Tamil,LANG,1,2260
+THA,Thai,LANG,1,2270
+TUR,Turkish,LANG,1,2280
+VIE,Vietnamese,LANG,1,2290

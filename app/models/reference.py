@@ -40,6 +40,13 @@ class SchoolType(BaseModel):
 
     __tablename__ = "school_types"
 
+    code: Mapped[str] = mapped_column(
+        String(10),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+
     name: Mapped[str] = mapped_column(
         String(100),
         unique=True,
@@ -150,6 +157,11 @@ class Subject(BaseModel):
     faculty: Mapped["Faculty"] = relationship(
         back_populates="subjects",
         lazy="selectin",
+    )
+
+    active: Mapped[bool] = mapped_column(
+        default=True,
+        nullable=False,
     )
 
     vacancy_subjects: Mapped[list["VacancySubject"]] = relationship(
