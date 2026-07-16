@@ -48,6 +48,18 @@ class AliasSource(Enum):
     HISTORICAL = "Historical"
 
 
+class SchoolSector(Enum):
+    GOVERNMENT = "Government"
+    CATHOLIC = "Catholic"
+    INDEPENDENT = "Independent"
+
+
+class SchoolSource(Enum):
+    NSW_DATASET = "NSW Dataset"
+    MANUAL = "Manual"
+    IMPORTED = "Imported"
+
+
 # ---------------------------------------------------------------------
 # School
 # ---------------------------------------------------------------------
@@ -114,6 +126,12 @@ class School(BaseModel):
         String(255)
     )
 
+    sector: Mapped[SchoolSector] = mapped_column(
+        SqlEnum(SchoolSector),
+        default=SchoolSector.GOVERNMENT,
+        nullable=False,
+    )
+
     latitude: Mapped[float] = mapped_column(
         Float,
         nullable=False,
@@ -177,6 +195,18 @@ class School(BaseModel):
         back_populates="school",
         lazy="selectin",
         cascade="all, delete-orphan",
+    )
+
+    source: Mapped[SchoolSource] = mapped_column(
+        SqlEnum(SchoolSource),
+        default=SchoolSource.NSW_DATASET,
+        nullable=False,
+    )
+
+    active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=False,
     )
 
     def __repr__(self) -> str:
