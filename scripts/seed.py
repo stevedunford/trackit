@@ -155,7 +155,10 @@ def load_regions() -> None:
 
         try:
 
-            name = row["name"].strip()
+            name = row.get("name", "").strip()
+
+            if not name:
+                raise ValueError("Missing region name")
 
             region = db.session.execute(
                 select(Region).filter_by(name=name)
