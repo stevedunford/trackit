@@ -1,5 +1,6 @@
 code,name,description
-HS,High School,Secondary school for Years 7-12
-CES,Central or Community School,Kindergarten to Year 12 school serving a regional or local community
-SSP,School for Specific Purposes,Specialist school supporting students with additional educational needs
-COL,Multi-campus College,Part of a multi-campus college operating as a single educational entity
+PS,Primary School,Students Kindergarten to Year 6
+HS,Secondary School,Students Year 7 to Year 12
+CES,Central/Community School,Students Kindergarten to Year 12
+SSP,School for Specific Purposes,Schools providing specialised education
+OTHER,Other School,Environmental education centres and other specialised facilities

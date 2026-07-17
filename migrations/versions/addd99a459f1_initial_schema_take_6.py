@@ -1,8 +1,8 @@
-"""Initial schema, take 5
+"""Initial schema, take 6
 
-Revision ID: 24820b92bc04
+Revision ID: addd99a459f1
 Revises: 
-Create Date: 2026-07-16 15:16:08.335105
+Create Date: 2026-07-16 22:28:04.392989
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '24820b92bc04'
+revision = 'addd99a459f1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -118,6 +118,9 @@ def upgrade():
     sa.Column('phone', sa.String(length=30), nullable=True),
     sa.Column('email', sa.String(length=150), nullable=True),
     sa.Column('website', sa.String(length=255), nullable=True),
+    sa.Column('sector', sa.Enum('GOVERNMENT', 'CATHOLIC', 'INDEPENDENT', name='schoolsector'), nullable=False),
+    sa.Column('foei', sa.Integer(), nullable=True),
+    sa.Column('icsea', sa.Integer(), nullable=True),
     sa.Column('latitude', sa.Float(), nullable=False),
     sa.Column('longitude', sa.Float(), nullable=False),
     sa.Column('enrolment', sa.Integer(), nullable=True),
@@ -128,8 +131,10 @@ def upgrade():
     sa.Column('principal', sa.String(length=100), nullable=True),
     sa.Column('selective', sa.Boolean(), nullable=False),
     sa.Column('boarding', sa.Boolean(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('source', sa.Enum('NSW_DATASET', 'MANUAL', 'IMPORTED', name='schoolsource'), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('last_updated', sa.Date(), nullable=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['locality_id'], ['localities.id'], ),

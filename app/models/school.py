@@ -6,11 +6,13 @@ School models for TRACKit.
 
 from __future__ import annotations
 
+from datetime import date
 from enum import Enum
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     Boolean,
+    Date,
     Enum as SqlEnum,
     Float,
     ForeignKey,
@@ -60,13 +62,21 @@ class SchoolSource(Enum):
     IMPORTED = "Imported"
 
 
+class Remoteness(Enum):
+    MAJOR_CITIES = "Major Cities of Australia"
+    INNER_REGIONAL = "Inner Regional Australia"
+    OUTER_REGIONAL = "Outer Regional Australia"
+    REMOTE = "Remote Australia"
+    VERY_REMOTE = "Very Remote Australia"
+
+
 # ---------------------------------------------------------------------
 # School
 # ---------------------------------------------------------------------
 
 class School(BaseModel):
     """
-    NSW Government school.
+    NSW schools.
     """
 
     __tablename__ = "schools"
@@ -126,10 +136,23 @@ class School(BaseModel):
         String(255)
     )
 
+    remoteness: Mapped[Remoteness] = mapped_column(
+        SqlEnum(Remoteness),
+        nullable=False,
+    )
+
     sector: Mapped[SchoolSector] = mapped_column(
         SqlEnum(SchoolSector),
         default=SchoolSector.GOVERNMENT,
         nullable=False,
+    )
+
+    foei: Mapped[int | None] = mapped_column(
+        Integer
+    )
+
+    icsea: Mapped[int | None] = mapped_column(
+        Integer
     )
 
     latitude: Mapped[float] = mapped_column(
@@ -176,6 +199,22 @@ class School(BaseModel):
         nullable=False,
     )
 
+    source: Mapped[SchoolSource] = mapped_column(
+        SqlEnum(SchoolSource),
+        default=SchoolSource.NSW_DATASET,
+        nullable=False,
+    )
+
+    active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=False,
+    )
+
+    last_updated: Mapped[date | None] = mapped_column(
+        Date
+    )
+
     locality: Mapped["Locality"] = relationship(
         back_populates="schools",
         lazy="selectin",
@@ -195,18 +234,6 @@ class School(BaseModel):
         back_populates="school",
         lazy="selectin",
         cascade="all, delete-orphan",
-    )
-
-    source: Mapped[SchoolSource] = mapped_column(
-        SqlEnum(SchoolSource),
-        default=SchoolSource.NSW_DATASET,
-        nullable=False,
-    )
-
-    active: Mapped[bool] = mapped_column(
-        Boolean,
-        default=True,
-        nullable=False,
     )
 
     def __repr__(self) -> str:
