@@ -44,19 +44,33 @@ async function loadSchools() {
 }
 
 
+/**CES,Central/Community School
+EEC,Environmental Education Centre
+IS,Infants School
+OTHER,Other School
+PS,Primary School
+SSP,School for Specific Purposes
+HS,Secondary School
+**/
+
+
 function refreshMarkers() {
 
     cluster.clearLayers();
 
-    const showPrimary =
-        document.getElementById("showPrimary").checked;
+    const filters = {
+        IS: document.getElementById("showInfant").checked,
+        PS: document.getElementById("showPrimary").checked,
+        HS: document.getElementById("showSecondary").checked,
+        CES: document.getElementById("showCentral").checked,
+        SSP: document.getElementById("showSpecific").checked,
+        EEC: document.getElementById("showEnvironmental").checked,
+        OTHER: document.getElementById("showOther").checked,
+    };
 
     for (const marker of markers) {
 
-        if (
-            !showPrimary &&
-            marker.school.school_type === "PS"
-        ) {
+        if (!filters[marker.school.school_type]) {
             continue;
         }
 
@@ -70,8 +84,10 @@ function refreshMarkers() {
 loadSchools();
 
 document
-    .getElementById("showPrimary")
-    .addEventListener(
-        "change",
-        refreshMarkers
+    .querySelectorAll(".school-filter")
+    .forEach(control =>
+        control.addEventListener(
+            "change",
+            refreshMarkers
+        )
     );
