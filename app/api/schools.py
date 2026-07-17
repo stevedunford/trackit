@@ -31,3 +31,24 @@ def get_school(school_code: int):
             "school_type": school.school_type.code,
         }
     )
+
+
+@bp.get("/schools")
+def get_schools():
+
+    schools = db.session.scalars(
+        select(School)
+    ).all()
+
+    return jsonify(
+        [
+            {
+                "school_code": school.school_code,
+                "name": school.name,
+                "latitude": school.latitude,
+                "longitude": school.longitude,
+    "school_type": school.school_type.code,
+            }
+            for school in schools
+        ]
+    )

@@ -11,24 +11,67 @@ L.tileLayer(
 ).addTo(map);
 
 
-// Load a school from the API
-async function loadSchool(code) {
+const markers = [];
+const cluster = L.markerClusterGroup();
 
-    const response = await fetch(`/api/v1/school/${code}`);
+map.addLayer(cluster);
 
-    const school = await response.json();
 
-    L.marker([school.latitude, school.longitude])
-        .addTo(map)
-        .bindPopup(
-            `<b>${school.name}</b><br>${school.town}`
-        )
-        .openPopup();
+async function loadSchools() {
 
-    map.setView(
-        [school.latitude, school.longitude],
-        15
-    );
+    const response = await fetch("/api/v1/schools");
+    const schools = await response.json();
+
+    for (const school of schools) {
+
+        const marker = L.marker([
+            school.latitude,
+            school.longitude
+        ]);
+
+        marker.school = school;
+
+        marker.bindPopup(
+            `<b>${school.name}</b>`
+        );
+
+        markers.push(marker);
+
+    }
+
+    refreshMarkers();
+
 }
 
-loadSchool(8347);
+
+function refreshMarkers() {
+
+    cluster.clearLayers();
+
+    const showPrimary =
+        document.getElementById("showPrimary").checked;
+
+    for (const marker of markers) {
+
+        if (
+            !showPrimary &&
+            marker.school.school_type === "PS"
+        ) {
+            continue;
+        }
+
+        cluster.addLayer(marker);
+
+    }
+
+}
+
+
+loadSchools();
+
+document
+    .getElementById("showPrimary")
+    .addEventListener(
+        "change",
+        refreshMarkers
+    );
