@@ -1,4 +1,4 @@
-from flask import Flask, app
+from flask import Flask
 
 from .config import Config
 from .extensions import db, migrate
@@ -16,8 +16,10 @@ def create_app():
     from app import models
 
     # Register Blueprints
-    from app.routes.home import bp as home_bp
+    from app.views import main_bp as main_bp
+    from app.api import bp as api_bp
 
-    app.register_blueprint(home_bp)
+    app.register_blueprint(main_bp)
+    app.register_blueprint(api_bp, url_prefix="/api/v1")
 
     return app
