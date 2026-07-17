@@ -25,7 +25,7 @@ from app.extensions import db
 
 from sqlalchemy import func, select
 
-from app.models.geography import Region
+from app.models.geography import Locality, Region
 from app.models.reference import Faculty, SchoolType, Subject
 
 
@@ -240,8 +240,118 @@ def load_regions() -> None:
 
 
 def load_localities() -> None:
+    """
+    Load localities from seed/localities.csv.
+    Insert them into the database if they don't already exist.
+    Update them if they do exist and have changed.
+    columns are: name,postcode,region,latitude,longitude,lga
+    """
+
     print("Loading Localities...")
-    print_summary("Localities", 0, 0, 0, 0)
+
+    filename = SEED_DIR / "localities.csv"
+
+    rows = read_csv(filename)
+
+    added = 0
+    updated = 0
+    unchanged = 0
+    errors = 0
+
+    for line_number, row in enumerate(rows, start=2):
+
+        try:
+
+            name = row.get("name", "").strip()
+            postcode = row.get("postcode", "").strip()
+            region_name = row.get("region", "").strip()
+            latitude = to_float(row.get("latitude", "").strip())
+            longitude = to_float(row.get("longitude", "").strip())
+            lga = row.get("lga", "").strip()
+
+            if not name:
+                raise ValueError("Missing locality name")
+
+            if not postcode:
+                raise ValueError("Missing postcode")
+
+            region = None
+
+            if region_name:
+                region = db.session.execute(
+                    select(Region).where(Region.name == region_name)
+                ).scalar_one_or_none()
+
+            locality = db.session.execute(
+                select(Locality).where(
+                    func.upper(Locality.name) == name.upper(),
+                    Locality.postcode == postcode,
+                )
+            ).scalar_one_or_none()
+
+            if locality is None:
+
+                locality = Locality(
+                    name=name,
+                    postcode=postcode,
+                    region=region,
+                    latitude=latitude,
+                    longitude=longitude,
+                    lga=lga,
+                )
+
+                db.session.add(locality)
+                added += 1
+
+            else:
+
+                changed = False
+
+                if locality.name != name:
+                    locality.name = name
+                    changed = True
+
+                if locality.region != region:
+                    locality.region = region
+                    changed = True
+
+                if locality.latitude != latitude:
+                    locality.latitude = latitude
+                    changed = True
+
+                if locality.longitude != longitude:
+                    locality.longitude = longitude
+                    changed = True
+
+                if locality.lga != lga:
+                    locality.lga = lga
+                    changed = True
+
+                if changed:
+                    updated += 1
+                else:
+                    unchanged += 1
+
+        except Exception as ex:
+
+            print(f"  ERROR: {filename.name} line {line_number}: {ex}")
+            errors += 1
+
+    try:
+        db.session.commit()
+    except Exception as ex:
+        db.session.rollback()
+        print(f"\nDatabase commit failed: {ex}")
+        return
+
+    print_summary(
+        "Localities",
+        added,
+        updated,
+        unchanged,
+        errors,
+    )
+
 
 
 def load_school_types() -> None:

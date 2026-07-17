@@ -120,6 +120,10 @@ class School(BaseModel):
         String(200)
     )
 
+    town_suburb: Mapped[str | None] = mapped_column(
+        String(100)
+    )
+
     postcode: Mapped[str | None] = mapped_column(
         String(10)
     )

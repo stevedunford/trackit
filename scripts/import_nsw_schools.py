@@ -52,10 +52,13 @@ REQUIRED_COLUMNS = (
 )
 
 LEVEL_MAP = {
+    "Infants School": "IS",
     "Primary School": "PS",
     "Secondary School": "HS",
     "Central/Community School": "CES",
     "School for Specific Purposes": "SSP",
+    "Schools for Specific Purposes": "SSP",
+    "Environmental Education Centre": "EEC",
     "Other School": "OTHER",
 }
 
@@ -307,6 +310,7 @@ def main():
 
                 school.name = row["School_name"]
                 school.address = row["Street"]
+                school.town_suburb = row["Town_suburb"]
                 school.postcode = row["Postcode"]
                 school.phone = row["Phone"]
                 school.email = row["School_Email"]

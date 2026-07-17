@@ -1,6 +1,8 @@
 code,name,description
+IS,Infants School,Students Kindergarten to Year 2
 PS,Primary School,Students Kindergarten to Year 6
 HS,Secondary School,Students Year 7 to Year 12
 CES,Central/Community School,Students Kindergarten to Year 12
 SSP,School for Specific Purposes,Schools providing specialised education
+EEC,Environmental Education Centre,Schools providing environmental education
 OTHER,Other School,Environmental education centres and other specialised facilities

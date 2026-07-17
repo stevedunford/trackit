@@ -1,8 +1,8 @@
-"""Initial schema, take 6
+"""Initial schema, take 8
 
-Revision ID: addd99a459f1
+Revision ID: 246a3d01f351
 Revises: 
-Create Date: 2026-07-16 22:28:04.392989
+Create Date: 2026-07-17 14:33:21.523133
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'addd99a459f1'
+revision = '246a3d01f351'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -114,10 +114,12 @@ def upgrade():
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('short_name', sa.String(length=80), nullable=True),
     sa.Column('address', sa.String(length=200), nullable=True),
+    sa.Column('town_suburb', sa.String(length=100), nullable=True),
     sa.Column('postcode', sa.String(length=10), nullable=True),
     sa.Column('phone', sa.String(length=30), nullable=True),
     sa.Column('email', sa.String(length=150), nullable=True),
     sa.Column('website', sa.String(length=255), nullable=True),
+    sa.Column('remoteness', sa.Enum('MAJOR_CITIES', 'INNER_REGIONAL', 'OUTER_REGIONAL', 'REMOTE', 'VERY_REMOTE', name='remoteness'), nullable=False),
     sa.Column('sector', sa.Enum('GOVERNMENT', 'CATHOLIC', 'INDEPENDENT', name='schoolsector'), nullable=False),
     sa.Column('foei', sa.Integer(), nullable=True),
     sa.Column('icsea', sa.Integer(), nullable=True),
