@@ -40,7 +40,7 @@ from app.models.school import Remoteness
 
 IMPORT_DIR = PROJECT_ROOT / "imports"
 
-DEFAULT_FILE = IMPORT_DIR / "master_dataset.csv"
+DEFAULT_FILE = IMPORT_DIR / "NSW_GOVT_SCHOOL_LIST.csv"
 
 REQUIRED_COLUMNS = (
     "School_code",

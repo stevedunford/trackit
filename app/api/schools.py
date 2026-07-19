@@ -47,7 +47,7 @@ def get_schools():
                 "name": school.name,
                 "latitude": school.latitude,
                 "longitude": school.longitude,
-    "school_type": school.school_type.code,
+                "school_type": school.school_type.code,
             }
             for school in schools
         ]

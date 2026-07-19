@@ -1,8 +1,8 @@
-"""Initial schema, take 8
+"""Initial database
 
-Revision ID: 246a3d01f351
+Revision ID: a0c15eb956c2
 Revises: 
-Create Date: 2026-07-17 14:33:21.523133
+Create Date: 2026-07-19 17:44:18.956788
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '246a3d01f351'
+revision = 'a0c15eb956c2'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,18 +32,18 @@ def upgrade():
     with op.batch_alter_table('faculties', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_faculties_code'), ['code'], unique=True)
 
-    op.create_table('jobfeed_issues',
-    sa.Column('issue_date', sa.Date(), nullable=False),
-    sa.Column('pdf_filename', sa.String(length=255), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
+    op.create_table('job_sources',
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('organisation', sa.String(length=100), nullable=True),
+    sa.Column('base_url', sa.String(length=255), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('notes', sa.Text(), nullable=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
-    with op.batch_alter_table('jobfeed_issues', schema=None) as batch_op:
-        batch_op.create_index(batch_op.f('ix_jobfeed_issues_issue_date'), ['issue_date'], unique=True)
-
     op.create_table('regions',
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.String(length=255), nullable=True),
@@ -110,6 +110,7 @@ def upgrade():
     op.create_table('schools',
     sa.Column('locality_id', sa.Integer(), nullable=False),
     sa.Column('school_type_id', sa.Integer(), nullable=False),
+    sa.Column('acara_id', sa.Integer(), nullable=True),
     sa.Column('school_code', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('short_name', sa.String(length=80), nullable=True),
@@ -127,7 +128,8 @@ def upgrade():
     sa.Column('longitude', sa.Float(), nullable=False),
     sa.Column('enrolment', sa.Integer(), nullable=True),
     sa.Column('transfer_points', sa.Integer(), nullable=False),
-    sa.Column('connected_communities', sa.Boolean(), nullable=False),
+    sa.Column('is_connected_community', sa.Boolean(), nullable=False),
+    sa.Column('community_information_url', sa.String(length=150), nullable=True),
     sa.Column('year_from', sa.Integer(), nullable=True),
     sa.Column('year_to', sa.Integer(), nullable=True),
     sa.Column('principal', sa.String(length=100), nullable=True),
@@ -145,6 +147,7 @@ def upgrade():
     sa.UniqueConstraint('school_code', name='uq_school_code')
     )
     with op.batch_alter_table('schools', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_schools_acara_id'), ['acara_id'], unique=False)
         batch_op.create_index(batch_op.f('ix_schools_locality_id'), ['locality_id'], unique=False)
         batch_op.create_index(batch_op.f('ix_schools_name'), ['name'], unique=False)
         batch_op.create_index(batch_op.f('ix_schools_school_code'), ['school_code'], unique=False)
@@ -167,29 +170,43 @@ def upgrade():
 
     op.create_table('vacancies',
     sa.Column('school_id', sa.Integer(), nullable=False),
-    sa.Column('jobfeed_id', sa.Integer(), nullable=False),
-    sa.Column('advert_number', sa.Integer(), nullable=False),
+    sa.Column('school_name', sa.String(length=255), nullable=True),
+    sa.Column('source_id', sa.Integer(), nullable=False),
+    sa.Column('external_id', sa.String(length=100), nullable=False),
+    sa.Column('reference_number', sa.String(length=50), nullable=True),
+    sa.Column('title', sa.String(length=255), nullable=False),
+    sa.Column('role', sa.String(length=100), nullable=True),
     sa.Column('employment_type', sa.Enum('PERMANENT', 'TEMPORARY', name='employmenttype'), nullable=False),
     sa.Column('full_time', sa.Boolean(), nullable=False),
     sa.Column('position_fraction', sa.Float(), nullable=False),
     sa.Column('number_of_positions', sa.Integer(), nullable=False),
-    sa.Column('has_signing_bonus', sa.Boolean(), nullable=False),
-    sa.Column('signing_bonus_amount', sa.Integer(), nullable=False),
+    sa.Column('graduate_position', sa.Boolean(), nullable=False),
+    sa.Column('salary_from', sa.Integer(), nullable=True),
+    sa.Column('salary_to', sa.Integer(), nullable=True),
+    sa.Column('has_relocation_support', sa.Boolean(), nullable=False),
+    sa.Column('has_recruitment_bonus', sa.Boolean(), nullable=False),
+    sa.Column('recruitment_bonus_amount', sa.Integer(), nullable=False),
+    sa.Column('publish_date', sa.Date(), nullable=True),
+    sa.Column('closing_date', sa.Date(), nullable=True),
     sa.Column('start_date', sa.Date(), nullable=True),
     sa.Column('end_date', sa.Date(), nullable=True),
-    sa.Column('closing_date', sa.Date(), nullable=True),
-    sa.Column('advert_text', sa.Text(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('description_html', sa.Text(), nullable=True),
+    sa.Column('apply_url', sa.String(length=500), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('scraped_at', sa.DateTime(), nullable=False),
+    sa.Column('last_seen', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['jobfeed_id'], ['jobfeed_issues.id'], ),
     sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
+    sa.ForeignKeyConstraint(['source_id'], ['job_sources.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('vacancies', schema=None) as batch_op:
-        batch_op.create_index(batch_op.f('ix_vacancies_jobfeed_id'), ['jobfeed_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_vacancies_active'), ['active'], unique=False)
+        batch_op.create_index(batch_op.f('ix_vacancies_external_id'), ['external_id'], unique=False)
         batch_op.create_index(batch_op.f('ix_vacancies_school_id'), ['school_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_vacancies_source_id'), ['source_id'], unique=False)
 
     op.create_table('vacancy_subjects',
     sa.Column('vacancy_id', sa.Integer(), nullable=False),
@@ -218,8 +235,10 @@ def downgrade():
 
     op.drop_table('vacancy_subjects')
     with op.batch_alter_table('vacancies', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_vacancies_source_id'))
         batch_op.drop_index(batch_op.f('ix_vacancies_school_id'))
-        batch_op.drop_index(batch_op.f('ix_vacancies_jobfeed_id'))
+        batch_op.drop_index(batch_op.f('ix_vacancies_external_id'))
+        batch_op.drop_index(batch_op.f('ix_vacancies_active'))
 
     op.drop_table('vacancies')
     with op.batch_alter_table('school_aliases', schema=None) as batch_op:
@@ -232,6 +251,7 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_schools_school_code'))
         batch_op.drop_index(batch_op.f('ix_schools_name'))
         batch_op.drop_index(batch_op.f('ix_schools_locality_id'))
+        batch_op.drop_index(batch_op.f('ix_schools_acara_id'))
 
     op.drop_table('schools')
     with op.batch_alter_table('subjects', schema=None) as batch_op:
@@ -252,10 +272,7 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_regions_name'))
 
     op.drop_table('regions')
-    with op.batch_alter_table('jobfeed_issues', schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f('ix_jobfeed_issues_issue_date'))
-
-    op.drop_table('jobfeed_issues')
+    op.drop_table('job_sources')
     with op.batch_alter_table('faculties', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_faculties_code'))
 

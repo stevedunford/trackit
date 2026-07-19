@@ -62,6 +62,18 @@ class SchoolSource(Enum):
     IMPORTED = "Imported"
 
 
+"""
+School Location fields in SIF format - might implement later
+10	Major Cities of Australia - New South Wales
+11	Inner Regional Australia - New South Wales
+12	Outer Regional Australia - New South Wales
+13	Remote Australia - New South Wales
+14	Very Remote Australia - New South Wales
+15	Migratory - Offshore - Shipping (NSW)
+19	No usual address (NSW)
+"""
+
+
 class Remoteness(Enum):
     MAJOR_CITIES = "Major Cities of Australia"
     INNER_REGIONAL = "Inner Regional Australia"
@@ -97,6 +109,12 @@ class School(BaseModel):
     school_type_id: Mapped[int] = mapped_column(
         ForeignKey("school_types.id"),
         nullable=False,
+        index=True,
+    )
+
+    acara_id: Mapped[int] = mapped_column(
+        Integer,
+        nullable=True,
         index=True,
     )
 
@@ -177,10 +195,14 @@ class School(BaseModel):
         nullable=False,
     )
 
-    connected_communities: Mapped[bool] = mapped_column(
+    is_connected_community: Mapped[bool] = mapped_column(
         Boolean,
         default=False,
         nullable=False,
+    )
+
+    community_information_url: Mapped[str | None] = mapped_column(
+        String(150)
     )
 
     year_from: Mapped[int | None]

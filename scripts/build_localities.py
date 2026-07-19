@@ -19,7 +19,7 @@ from app.utils.banner import title_banner
 IMPORT_DIR = PROJECT_ROOT / "imports"
 SEED_DIR = PROJECT_ROOT / "seed"
 
-MASTER_DATASET = IMPORT_DIR / "master_dataset.csv"
+MASTER_DATASET = IMPORT_DIR / "NSW_GOVT_SCHOOL_LIST.csv"
 LOCALITIES_CSV = SEED_DIR / "localities.csv"
 BACKUP_CSV = SEED_DIR / "localities.csv.bak"
 

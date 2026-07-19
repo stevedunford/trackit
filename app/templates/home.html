@@ -6,119 +6,141 @@ TRACKit - NSW Teaching Jobs
 
 {% block body %}
 
-<div id="toolbar" class="p-2 border-bottom">
+<div id="app">
 
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showInfant"
-            checked>
+    <aside id="sidebar">
 
-        <label
-            class="form-check-label"
-            for="showInfant">
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showInfant"
+                checked>
 
-            Infant Schools
+            <label
+                class="form-check-label"
+                for="showInfant">
 
-        </label>
-    </div>
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showPrimary"
-            checked>
+                Infant Schools
 
-        <label
-            class="form-check-label"
-            for="showPrimary">
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showPrimary"
+                checked>
 
-            Primary Schools
+            <label
+                class="form-check-label"
+                for="showPrimary">
 
-        </label>
-    </div>
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showSecondary"
-            checked>
+                Primary Schools
 
-        <label
-            class="form-check-label"
-            for="showSecondary">
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showSecondary"
+                checked>
 
-            Secondary Schools
+            <label
+                class="form-check-label"
+                for="showSecondary">
 
-        </label>
-    </div>
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showCentral"
-            checked>
+                Secondary Schools
 
-        <label
-            class="form-check-label"
-            for="showCentral">
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showCentral"
+                checked>
 
-            Central Schools
+            <label
+                class="form-check-label"
+                for="showCentral">
 
-        </label>
-    </div>
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showSpecific"
-            checked>
+                Central Schools
 
-        <label
-            class="form-check-label"
-            for="showSpecific">
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showSpecific"
+                checked>
 
-            Schools for Specific Purposes
+            <label
+                class="form-check-label"
+                for="showSpecific">
 
-        </label>
-    </div>
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showEnvironmental"
-            checked>
+                Schools for Specific Purposes
 
-        <label
-            class="form-check-label"
-            for="showEnvironmental">
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showEnvironmental"
+                checked>
 
-            Environmental Education Schools
+            <label
+                class="form-check-label"
+                for="showEnvironmental">
 
-        </label>
-    </div>
-    <div class="school-filter form-check form-check-inline">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="showOther"
-            checked>
+                Environmental Education Schools
 
-        <label
-            class="form-check-label"
-            for="showOther">
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showDistance"
+                checked>
 
-            Other Schools
+            <label
+                class="form-check-label"
+                for="showDistance">
 
-        </label>
-    </div>
+                Distance Schools
 
+            </label>
+        </div>
+        <div class="school-filter form-check form-check-inline">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showOther"
+                checked>
 
+            <label
+                class="form-check-label"
+                for="showOther">
+
+                Other Schools
+
+            </label>
+
+        </div>
+
+    </aside>
+
+    <main id="map-container">
+        <div id="map"></div>
+    </main>
 
 </div>
 
 
-<div id="map"></div>
+
 
 {% endblock %}

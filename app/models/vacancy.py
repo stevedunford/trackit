@@ -1,17 +1,19 @@
 """
 vacancy.py
 
-Vacancy models for TRACKit.
+Vacancy models for TeachWhere.
 """
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
+    Boolean,
     Date,
+    DateTime,
     Enum as SqlEnum,
     ForeignKey,
     Integer,
@@ -51,40 +53,69 @@ class RequirementType(Enum):
 
 
 # ---------------------------------------------------------------------
-# JobFeed
+# Job Source
 # ---------------------------------------------------------------------
 
-class JobFeed(BaseModel):
+class JobSource(BaseModel):
     """
-    One weekly JobFeed publication.
+    A source of teaching vacancies.
+
+    Examples:
+
+        NSW JobFeed
+
+        I Work For NSW
+
+        Priority Recruitment Support
+
+        Teacher Recruitment
+
+        Sydney Catholic Schools
     """
 
-    __tablename__ = "jobfeed_issues"
+    __tablename__ = "job_sources"
 
-    issue_date: Mapped[date] = mapped_column(
-        Date,
-        nullable=False,
+    name: Mapped[str] = mapped_column(
+        String(100),
         unique=True,
-        index=True,
+        nullable=False,
     )
 
-    pdf_filename: Mapped[str | None] = mapped_column(
+    organisation: Mapped[str | None] = mapped_column(
+        String(100)
+    )
+
+    base_url: Mapped[str | None] = mapped_column(
         String(255)
     )
 
+    active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=False,
+    )
+
+    notes: Mapped[str | None] = mapped_column(
+        Text
+    )
+
     vacancies: Mapped[list["Vacancy"]] = relationship(
-        back_populates="jobfeed",
+        back_populates="source",
         lazy="selectin",
-        cascade="all, delete-orphan",
     )
 
     def __repr__(self) -> str:
-        return f"<JobFeed {self.issue_date}>"
 
+        return f"<JobSource {self.name}>"
+
+
+# ---------------------------------------------------------------------
+# Vacancy
+# ---------------------------------------------------------------------
 
 class Vacancy(BaseModel):
     """
-    A single advertised vacancy.
+    A single advertised teaching vacancy.
     """
 
     __tablename__ = "vacancies"
@@ -95,16 +126,46 @@ class Vacancy(BaseModel):
         index=True,
     )
 
-    jobfeed_id: Mapped[int] = mapped_column(
-        ForeignKey("jobfeed_issues.id"),
+    school_name: Mapped[str | None] = mapped_column(
+        String(255)
+    )
+
+    source_id: Mapped[int] = mapped_column(
+        ForeignKey("job_sources.id"),
         nullable=False,
         index=True,
     )
 
-    advert_number: Mapped[int] = mapped_column(
-        Integer,
+    # -------------------------------------------------------------
+    # Source identifiers
+    # -------------------------------------------------------------
+
+    external_id: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+        index=True,
+    )
+
+    reference_number: Mapped[str | None] = mapped_column(
+        String(50)
+    )
+
+    # -------------------------------------------------------------
+    # Display
+    # -------------------------------------------------------------
+
+    title: Mapped[str] = mapped_column(
+        String(255),
         nullable=False,
     )
+
+    role: Mapped[str | None] = mapped_column(
+        String(100)
+    )
+
+    # -------------------------------------------------------------
+    # Employment
+    # -------------------------------------------------------------
 
     employment_type: Mapped[EmploymentType] = mapped_column(
         SqlEnum(EmploymentType),
@@ -112,6 +173,7 @@ class Vacancy(BaseModel):
     )
 
     full_time: Mapped[bool] = mapped_column(
+        Boolean,
         default=True,
         nullable=False,
     )
@@ -127,14 +189,56 @@ class Vacancy(BaseModel):
         nullable=False,
     )
 
-    has_signing_bonus: Mapped[bool] = mapped_column(
+    graduate_position: Mapped[bool] = mapped_column(
+        Boolean,
         default=False,
         nullable=False,
     )
 
-    signing_bonus_amount: Mapped[int] = mapped_column(
+    # -------------------------------------------------------------
+    # Salary
+    # -------------------------------------------------------------
+
+    salary_from: Mapped[int | None] = mapped_column(
+        Integer
+    )
+
+    salary_to: Mapped[int | None] = mapped_column(
+        Integer
+    )
+
+    # -------------------------------------------------------------
+    # Incentives
+    # -------------------------------------------------------------
+
+    has_relocation_support: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False,
+    )
+
+    has_recruitment_bonus: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False,
+    )
+
+    recruitment_bonus_amount: Mapped[int] = mapped_column(
+        Integer,
         default=0,
         nullable=False,
+    )
+
+    # -------------------------------------------------------------
+    # Dates
+    # -------------------------------------------------------------
+
+    publish_date: Mapped[date | None] = mapped_column(
+        Date
+    )
+
+    closing_date: Mapped[date | None] = mapped_column(
+        Date
     )
 
     start_date: Mapped[date | None] = mapped_column(
@@ -145,21 +249,52 @@ class Vacancy(BaseModel):
         Date
     )
 
-    closing_date: Mapped[date | None] = mapped_column(
-        Date
+    # -------------------------------------------------------------
+    # Content
+    # -------------------------------------------------------------
+
+    description_html: Mapped[str | None] = mapped_column(
+        Text
     )
 
-    advert_text: Mapped[str] = mapped_column(
-        Text,
+    apply_url: Mapped[str] = mapped_column(
+        String(500),
         nullable=False,
     )
+
+    # -------------------------------------------------------------
+    # Scraper
+    # -------------------------------------------------------------
+
+    active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=False,
+        index=True,
+    )
+
+    scraped_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )
+
+    last_seen: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )
+
+    # -------------------------------------------------------------
+    # Relationships
+    # -------------------------------------------------------------
 
     school: Mapped["School"] = relationship(
         back_populates="vacancies",
         lazy="selectin",
     )
 
-    jobfeed: Mapped["JobFeed"] = relationship(
+    source: Mapped["JobSource"] = relationship(
         back_populates="vacancies",
         lazy="selectin",
     )
@@ -171,10 +306,11 @@ class Vacancy(BaseModel):
     )
 
     def __repr__(self) -> str:
+
         return (
             f"<Vacancy "
-            f"{self.school.name} "
-            f"{self.employment_type.value}>"
+            f"{self.title} "
+            f"({self.school.name})>"
         )
 
 
@@ -185,8 +321,6 @@ class Vacancy(BaseModel):
 class VacancySubject(BaseModel):
     """
     Subject attached to a vacancy.
-
-    A vacancy may have multiple subjects.
 
     Example:
 
@@ -225,6 +359,7 @@ class VacancySubject(BaseModel):
     )
 
     def __repr__(self) -> str:
+
         return (
             f"<VacancySubject "
             f"{self.subject.code} "
